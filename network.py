@@ -92,7 +92,7 @@ class Decoder(nn.Module):
         # space for training with a cross-entropy loss function. 
          
         
-        
+        outputs =     # outputs: (batch_size, t+1, vocab_size)
         # do not change the following code
         outputs =  pack_padded_sequence(outputs, lengths, batch_first=True)
         return outputs[0]
