@@ -14,11 +14,13 @@ $ python setup.py build
 $ python setup.py install
 $ cd ../../
 $ git clone xxxcsc249_hw4
+$ cd csc249_hw4
 ```
 #### 2. Download data and evaluation toolboxes
 ```bash
 $ download support.zip from xxx
 $ unzip the file and copy folders: data, pycocotoolscap, pycocoevalcap into csc249_hw4
+$ pip install -r requirements.txt
 $ download stanford NLP models (require java 1.8.0): ./get_stanford_models.sh 
 ```
 
