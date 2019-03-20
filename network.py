@@ -17,31 +17,12 @@ class LSTMCell(nn.Module):
     def __init__(self, input_size, hidden_size):
         super(LSTMCell, self).__init__()
         # TODO:
-        self.input_size = input_size
-        self.hidden_size = hidden_size
-        self.fc_x = nn.Linear(input_size, 4 * hidden_size, bias=True)
-        self.fc_h = nn.Linear(hidden_size, 4 * hidden_size, bias=True)
-        self.reset_parameters()
-
-    def reset_parameters(self):
-        std = 1.0 / math.sqrt(self.hidden_size)
-        for w in self.parameters():
-            w.data.uniform_(-std, std)
+     
 
     def forward(self, x, hidden):
         # TODO:
-        hx, cx = hidden
-        x = x.view(-1, x.size(1))
-
-        gates = self.fc_x(x) + self.fc_h(hx)
-        ingate, forgetgate, cellgate, outgate = gates.chunk(4, 1)
-        ingate = torch.sigmoid(ingate)
-        forgetgate = torch.sigmoid(forgetgate)
-        cellgate = torch.tanh(cellgate)
-        outgate = torch.sigmoid(outgate)
-        cy = torch.mul(cx, forgetgate) + torch.mul(ingate, cellgate)
-        hy = torch.mul(outgate, torch.tanh(cy))
-        return (hy, cy)
+        
+        return hidden
 
 class LSTM(nn.Module):
     def __init__(self, input_size, hidden_size):
@@ -110,10 +91,7 @@ class Decoder(nn.Module):
         # LSTM with the initialized states; (4) use a linear layer to project the feature to vocabulary 
         # space for training with a cross-entropy loss function. 
          
-        embeddings = self.embed(captions)
-        embeddings = torch.cat((features.unsqueeze(1), embeddings), 1)
-        out, _ = self.lstm(embeddings, states)
-        outputs = self.linear(out)
+        
         
         # do not change the following code
         outputs =  pack_padded_sequence(outputs, lengths, batch_first=True)
