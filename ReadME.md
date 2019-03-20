@@ -2,7 +2,7 @@
 
 ## Usage
 
-Main dependencies: Python 2.7 and Pytorch-0.4.0
+Main dependencies: Python 2.7 and Pytorch-0.4.0 (https://pytorch.org/get-started/previous-versions/)
 
 
 #### 1. Download and compile some toolboxes from coco. Please make sure that you are using python 2.7
@@ -13,14 +13,13 @@ $ make
 $ python setup.py build
 $ python setup.py install
 $ cd ../../
-$ git clone xxxcsc249_hw4
+$ git clone https://github.com/YapengTian/csc249_hw4.git
 $ cd csc249_hw4
 ```
 #### 2. Download data and evaluation toolboxes
 ```bash
-$ download support.zip from xxx
+$ download support.zip from https://drive.google.com/file/d/1ZqJs2AGtMTfGTgH1oHTP_ZEFXRNX3uLj/view?usp=sharing (1.7 GB)
 $ unzip the file and copy folders: data, pycocotoolscap, pycocoevalcap into csc249_hw4
-$ pip install -r requirements.txt
 $ download stanford NLP models (require java 1.8.0): ./get_stanford_models.sh 
 ```
 
