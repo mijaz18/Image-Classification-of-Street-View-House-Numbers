@@ -9,7 +9,6 @@ from data_loader import get_loader
 from network import Encoder, Decoder
 from torch.nn.utils.rnn import pack_padded_sequence
 from torchvision import transforms
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 # use gpu if cuda can be detected
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
