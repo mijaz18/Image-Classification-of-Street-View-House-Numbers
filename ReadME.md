@@ -20,7 +20,7 @@ $ cd csc249_hw4
 ```bash
 $ download support.zip from https://drive.google.com/file/d/1ZqJs2AGtMTfGTgH1oHTP_ZEFXRNX3uLj/view?usp=sharing (1.7 GB)
 $ unzip the file and copy folders: data, pycocotoolscap, pycocoevalcap into csc249_hw4
-$ download stanford NLP models (require java 1.8.0): ./get_stanford_models.sh 
+$ download stanford NLP models (require java 1.8.0): run ./get_stanford_models.sh 
 ```
 
 #### 3. Train
