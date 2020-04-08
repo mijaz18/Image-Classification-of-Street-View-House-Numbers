@@ -54,6 +54,7 @@ class LSTMCell(nn.Module):
         c_1 = torch.sigmoid(f) * c_0 + torch.sigmoid(i) * torch.tanh(g)
         h_1 = torch.sigmoid(o) * torch.tanh(c_1)
         hidden = (h_1,c_1)
+        #Try this
         return hidden
 
 class LSTM(nn.Module):
