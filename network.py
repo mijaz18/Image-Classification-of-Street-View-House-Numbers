@@ -21,7 +21,17 @@ class LSTMCell(nn.Module):
 
     def forward(self, x, hidden):
         # TODO:
-        
+        h_0, c_0 = hidden
+        batch_size = h_0.size(0)
+        bias_batch = (self.bias.unsqueeze(0)
+                      .expand(batch_size, *self.bias.size()))
+        wh_b = torch.addmm(bias_batch, h_0, self.weight_hh)
+        wi = torch.mm(x, self.weight_ih)
+        f, i, o, g = torch.split(wh_b + wi,
+                                 self.hidden_size, dim=1)
+        c_1 = torch.sigmoid(f) * c_0 + torch.sigmoid(i) * torch.tanh(g)
+        h_1 = torch.sigmoid(o) * torch.tanh(c_1)
+        hidden = (h_1,c_1)
         return hidden
 
 class LSTM(nn.Module):
