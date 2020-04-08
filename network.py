@@ -17,6 +17,28 @@ class LSTMCell(nn.Module):
     def __init__(self, input_size, hidden_size):
         super(LSTMCell, self).__init__()
         # TODO:
+        self.input_size = input_size
+        self.hidden_size = hidden_size
+        #self.use_bias = use_bias
+        self.weight_ih = nn.Parameter(
+            torch.FloatTensor(input_size, 4 * hidden_size))
+        self.weight_hh = nn.Parameter(
+            torch.FloatTensor(hidden_size, 4 * hidden_size))
+        # if use_bias:
+        #     self.bias = nn.Parameter(torch.FloatTensor(4 * hidden_size))
+        # else:
+        #     self.register_parameter('bias', None)
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        """
+        Initialize parameters following the way proposed in the paper.
+        """
+
+        weight_hh_data = torch.eye(self.hidden_size)
+        weight_hh_data = weight_hh_data.repeat(1, 4)
+        self.weight_hh.data.set_(weight_hh_data)
+        # The bias is just set to zero vectors.
      
 
     def forward(self, x, hidden):
