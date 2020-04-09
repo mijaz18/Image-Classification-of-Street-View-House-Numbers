@@ -106,8 +106,9 @@ class Decoder(nn.Module):
         # line and uncomment the self.lstm = LSTM(embed_size, hidden_size)
         #self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
         h0 = torch.randn(num_layers*2, embed_size, hidden_size)
-        h1 = torch.randn(num_layers * 2, embed_size, hidden_size)
-        self.lstm = LSTM(embed_size,(h0,h1), hidden_size)
+        c0 = torch.randn(num_layers * 2, embed_size, hidden_size)
+        # self.lstm = LSTM(embed_size,h0,h1, hidden_size)
+        self.lstm = LSTM(embed_size,(h0,c0))
 
         
         self.linear = nn.Linear(hidden_size, vocab_size) # project the outputs from LSTM to vocabulary space
