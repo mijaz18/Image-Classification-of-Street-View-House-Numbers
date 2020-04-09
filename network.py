@@ -4,6 +4,7 @@ import torchvision.models as models
 from torch.nn.utils.rnn import pack_padded_sequence
 import torch.autograd as autograd
 from torch.autograd import Variable
+import inspect
 import math
 
 class LSTMCell(nn.Module):
@@ -108,6 +109,7 @@ class Decoder(nn.Module):
         # line and uncomment the self.lstm = LSTM(embed_size, hidden_size)
         #self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
         # self.lstm = LSTM(embed_size,h0,h1, hidden_size)
+        print(inspect.signature(LSTM.__init__))
         self.lstm = LSTM(embed_size,self.states,hidden_size)
 
         
