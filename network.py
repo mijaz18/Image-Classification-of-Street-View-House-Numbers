@@ -108,8 +108,6 @@ class Decoder(nn.Module):
         # TODO: when you use your implemented LSTM, please comment the following
         # line and uncomment the self.lstm = LSTM(embed_size, hidden_size)
         #self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
-        states = (autograd.Variable(torch.zeros(1, embed_size, self.hidden_size).cuda()),
-                  autograd.Variable(torch.zeros(1, embed_size, self.hidden_size).cuda()))
         self.lstm = LSTM(embed_size, hidden_size)
 
         
@@ -135,7 +133,7 @@ class Decoder(nn.Module):
         embeddings = self.embed(captions)
         embeddings = torch.cat((features.unsqueeze(1), embeddings), 1)
         packed = pack_padded_sequence(embeddings, lengths, batch_first=True)
-        hiddens, _ = self.lstm(states,packed)
+        hiddens, _ = self.lstm(packed,states)
         outputs = self.linear(hiddens[0])
 
         # do not change the following code
