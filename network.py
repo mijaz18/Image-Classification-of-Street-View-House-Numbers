@@ -110,7 +110,7 @@ class Decoder(nn.Module):
         #self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
         states = (autograd.Variable(torch.zeros(1, embed_size, self.hidden_size).cuda()),
                   autograd.Variable(torch.zeros(1, embed_size, self.hidden_size).cuda()))
-        self.lstm = LSTM(embed_size,states,hidden_size)
+        self.lstm = LSTM(states,hidden_size)
 
         
         self.linear = nn.Linear(hidden_size, vocab_size) # project the outputs from LSTM to vocabulary space
