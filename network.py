@@ -108,9 +108,9 @@ class Decoder(nn.Module):
         # TODO: when you use your implemented LSTM, please comment the following
         # line and uncomment the self.lstm = LSTM(embed_size, hidden_size)
         #self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
-        # self.lstm = LSTM(embed_size,h0,h1, hidden_size)
-        # print(inspect.getargspec(LSTM.__init__))
-        self.lstm = LSTM(self,embed_size)
+        states = (autograd.Variable(torch.zeros(1, embed_size, self.hidden_size).cuda()),
+                  autograd.Variable(torch.zeros(1, embed_size, self.hidden_size).cuda()))
+        self.lstm = LSTM(embed_size,states,hidden_size)
 
         
         self.linear = nn.Linear(hidden_size, vocab_size) # project the outputs from LSTM to vocabulary space
@@ -118,7 +118,7 @@ class Decoder(nn.Module):
         
     def forward(self, features, captions, lengths):
         """Decode image feature vectors and generates captions."""
-        
+
         # initialize the hidden state and cell state
         states = (autograd.Variable(torch.zeros(1, features.size(0), self.hidden_size).cuda()),
                   autograd.Variable(torch.zeros(1, features.size(0), self.hidden_size).cuda()))
