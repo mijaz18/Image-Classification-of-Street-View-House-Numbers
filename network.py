@@ -58,7 +58,7 @@ class LSTMCell(nn.Module):
         c_t = c_t.view(1, c_t.size(0), -1)
         hidden = (h_t,c_t)
         #Try this
-        return hidden
+        return h_t,hidden
 
 class LSTM(nn.Module):
     def __init__(self, input_size, hidden_size):
