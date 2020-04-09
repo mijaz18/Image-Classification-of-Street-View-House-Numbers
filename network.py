@@ -58,7 +58,7 @@ class LSTMCell(nn.Module):
         c_t = c_t.view(1, c_t.size(0), -1)
         hidden = (h_t,c_t)
         #Try this
-        return h_t,c_t
+        return (h_t,c_t)
 
 class LSTM(nn.Module):
     def __init__(self, input_size, hidden_size):
@@ -135,7 +135,7 @@ class Decoder(nn.Module):
         embeddings = self.embed(captions)
         embeddings = torch.cat((features.unsqueeze(1), embeddings), 1)
         packed = pack_padded_sequence(embeddings, lengths, batch_first=True)
-        hiddens, _ = self.lstm(packed,states)
+        hiddens, _ = self.lstm(states,packed)
         outputs = self.linear(hiddens[0])
 
         # do not change the following code
