@@ -109,7 +109,7 @@ class Decoder(nn.Module):
         # line and uncomment the self.lstm = LSTM(embed_size, hidden_size)
         #self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
         # self.lstm = LSTM(embed_size,h0,h1, hidden_size)
-        print(inspect.signature(LSTM.__init__))
+        print(inspect.getargspec(LSTM.__init__))
         self.lstm = LSTM(embed_size,self.states,hidden_size)
 
         
