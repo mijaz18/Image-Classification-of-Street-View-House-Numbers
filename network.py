@@ -38,7 +38,7 @@ class LSTMCell(nn.Module):
         h, c = hidden
         h = h.view(h.size(1), -1)
         c = c.view(c.size(1), -1)
-        x = x.contigious().view(x.size(1), -1)
+        x = x.contiguous().view(x.size(1), -1)
 
         # Linear mappings
         preact = self.i2h(x) + self.h2h(h)
