@@ -17,43 +17,45 @@ class LSTMCell(nn.Module):
     def __init__(self, input_size, hidden_size):
         super(LSTMCell, self).__init__()
         # TODO:
-        # self.input_size = input_size
-        # self.hidden_size = hidden_size
-        # #self.use_bias = use_bias
-        # self.weight_ih = nn.Parameter(
-        #     torch.FloatTensor(input_size, 4 * hidden_size))
-        # self.weight_hh = nn.Parameter(
-        #     torch.FloatTensor(hidden_size, 4 * hidden_size))
-        # if use_bias:
-        #     self.bias = nn.Parameter(torch.FloatTensor(4 * hidden_size))
-        # else:
-        #     self.register_parameter('bias', None)
-        # self.reset_parameters()
+        self.input_size = input_size
+        self.hidden_size = hidden_size
+        self.bias = True
+        self.i2h = nn.Linear(input_size, 4 * hidden_size, bias=True)
+        self.h2h = nn.Linear(hidden_size, 4 * hidden_size, bias=True)
+        self.reset_parameters()
+
 
     def reset_parameters(self):
-        """
-        Initialize parameters following the way proposed in the paper.
-        """
+        std = 1.0 / math.sqrt(self.hidden_size)
+        for w in self.parameters():
+            w.data.uniform_(-std, std)
 
-        weight_hh_data = torch.eye(self.hidden_size)
-        weight_hh_data = weight_hh_data.repeat(1, 4)
-        self.weight_hh.data.set_(weight_hh_data)
-        # The bias is just set to zero vectors.
      
 
     def forward(self, x, hidden):
         # TODO:
-        # h_0, c_0 = hidden
-        # batch_size = h_0.size(0)
-        # bias_batch = (self.bias.unsqueeze(0)
-        #               .expand(batch_size, *self.bias.size()))
-        # wh_b = torch.addmm(bias_batch, h_0, self.weight_hh)
-        # wi = torch.mm(x, self.weight_ih)
-        # f, i, o, g = torch.split(wh_b + wi,
-        #                          self.hidden_size, dim=1)
-        # c_1 = torch.sigmoid(f) * c_0 + torch.sigmoid(i) * torch.tanh(g)
-        # h_1 = torch.sigmoid(o) * torch.tanh(c_1)
-        # hidden = (h_1,c_1)
+        h, c = hidden
+        h = h.view(h.size(1), -1)
+        c = c.view(c.size(1), -1)
+        x = x.view(x.size(1), -1)
+
+        # Linear mappings
+        preact = self.i2h(x) + self.h2h(h)
+
+        # activations
+        gates = preact[:, :3 * self.hidden_size].sigmoid()
+        g_t = preact[:, 3 * self.hidden_size:].tanh()
+        i_t = gates[:, :self.hidden_size]
+        f_t = gates[:, self.hidden_size:2 * self.hidden_size]
+        o_t = gates[:, -self.hidden_size:]
+
+        c_t = torch.mul(c, f_t) + torch.mul(i_t, g_t)
+
+        h_t = torch.mul(o_t, c_t.tanh())
+
+        h_t = h_t.view(1, h_t.size(0), -1)
+        c_t = c_t.view(1, c_t.size(0), -1)
+        hidden = (h_t,c_t)
         #Try this
         return hidden
 
@@ -105,8 +107,6 @@ class Decoder(nn.Module):
         # TODO: when you use your implemented LSTM, please comment the following
         # line and uncomment the self.lstm = LSTM(embed_size, hidden_size)
         #self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
-        h0 = torch.randn(num_layers*2, embed_size, hidden_size)
-        c0 = torch.randn(num_layers * 2, embed_size, hidden_size)
         # self.lstm = LSTM(embed_size,h0,h1, hidden_size)
         self.lstm = LSTM(embed_size,hidden_size)
 
