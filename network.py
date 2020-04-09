@@ -109,8 +109,8 @@ class Decoder(nn.Module):
         
         # TODO: when you use your implemented LSTM, please comment the following
         # line and uncomment the self.lstm = LSTM(embed_size, hidden_size)
-        self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
-        #self.lstm = LSTM(embed_size, hidden_size)
+        #self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
+        self.lstm = LSTM(embed_size, hidden_size)
 
         
         self.linear = nn.Linear(hidden_size, vocab_size) # project the outputs from LSTM to vocabulary space
