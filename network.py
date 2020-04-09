@@ -135,7 +135,7 @@ class Decoder(nn.Module):
         embeddings = self.embed(captions)
         embeddings = torch.cat((features.unsqueeze(1), embeddings), 1)
         packed = pack_padded_sequence(embeddings, lengths, batch_first=True)
-        hiddens, _ = self.lstm(packed)
+        hiddens, _ = self.lstm(packed,states)
         outputs = self.linear(hiddens[0])
 
         # do not change the following code
