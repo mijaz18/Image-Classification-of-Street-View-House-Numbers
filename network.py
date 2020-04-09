@@ -20,9 +20,9 @@ class LSTMCell(nn.Module):
         # TODO:
         self.input_size = input_size
         self.hidden_size = hidden_size
-        self.bias = True
-        self.i2h = nn.Linear(input_size, 4 * hidden_size, bias=True)
-        self.h2h = nn.Linear(hidden_size, 4 * hidden_size, bias=True)
+        #self.bias = True
+        self.i2h = nn.Linear(input_size, 4 * hidden_size)
+        self.h2h = nn.Linear(hidden_size, 4 * hidden_size)
         self.reset_parameters()
 
 
@@ -110,7 +110,7 @@ class Decoder(nn.Module):
         #self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
         states = (autograd.Variable(torch.zeros(1, embed_size, self.hidden_size).cuda()),
                   autograd.Variable(torch.zeros(1, embed_size, self.hidden_size).cuda()))
-        self.lstm = LSTM(embed_size, hidden_size), states
+        self.lstm = LSTM(embed_size, num_layers, hidden_size)
 
         
         self.linear = nn.Linear(hidden_size, vocab_size) # project the outputs from LSTM to vocabulary space
