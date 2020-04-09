@@ -18,50 +18,14 @@ class LSTMCell(nn.Module):
     def __init__(self, input_size, hidden_size):
         super(LSTMCell, self).__init__()
         # TODO:
-        # self.input_size = input_size
-        # self.hidden_size = hidden_size
-        # self.bias = True
-        # self.i2h = nn.Linear(input_size, 4 * hidden_size, True)
-        # self.h2h = nn.Linear(hidden_size, 4 * hidden_size, True)
-        # self.reset_parameters()
 
         self.input_layer = torch.nn.Linear(input_size, hidden_size * 4)
         self.hidden_layer = torch.nn.Linear(hidden_size, hidden_size * 4)
         self.h = hidden_size
 
 
-    def reset_parameters(self):
-        std = 1.0 / math.sqrt(self.hidden_size)
-        for w in self.parameters():
-            w.data.uniform_(-std, std)
-
-     
-
     def forward(self, x, hidden):
         # TODO:
-        # h, c = hidden
-        # h = h.view(h.size(1), -1)
-        # c = c.view(c.size(1), -1)
-        # x = x.contiguous().view(x.size(1), -1)
-        #
-        # # Linear mappings
-        # preact = self.i2h(x) + self.h2h(h)
-        #
-        # # activations
-        # gates = preact[:, :3 * self.hidden_size].sigmoid()
-        # g_t = preact[:, 3 * self.hidden_size:].tanh()
-        # i_t = gates[:, :self.hidden_size]
-        # f_t = gates[:, self.hidden_size:2 * self.hidden_size]
-        # o_t = gates[:, -self.hidden_size:]
-        #
-        # c_t = torch.mul(c, f_t) + torch.mul(i_t, g_t)
-        #
-        # h_t = torch.mul(o_t, c_t.tanh())
-        #
-        # h_t = h_t.view(1, h_t.size(0), -1)
-        # c_t = c_t.view(1, c_t.size(0), -1)
-        # hidden = (h_t,c_t)
-        # return hidden
         z_tm1, c_tm1 = hidden
         h = self.h
         gates = self.input_layer(x) + self.hidden_layer(z_tm1)
@@ -126,8 +90,8 @@ class Decoder(nn.Module):
         
         # TODO: when you use your implemented LSTM, please comment the following
         # line and uncomment the self.lstm = LSTM(embed_size, hidden_size)
-        #self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
-        self.lstm = LSTM(embed_size, hidden_size)
+        self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True)
+        #self.lstm = LSTM(embed_size, hidden_size)
 
         
         self.linear = nn.Linear(hidden_size, vocab_size) # project the outputs from LSTM to vocabulary space
@@ -146,14 +110,7 @@ class Decoder(nn.Module):
         # word embedding (bxtxd) and obtain the new features (bx(t+1)xd); (3) feed the new features into 
         # LSTM with the initialized states; (4) use a linear layer to project the feature to vocabulary 
         # space for training with a cross-entropy loss function. 
-         
-        
-        #outputs =      #outputs: (batch_size, t+1, vocab_size)
-        # embeddings = self.embed(captions)
-        # embeddings = torch.cat((features.unsqueeze(1), embeddings), 1)
-        # packed = pack_padded_sequence(embeddings, lengths, batch_first=True)
-        # hiddens, _ = self.lstm(packed,states)
-        # outputs = self.linear(hiddens[0])
+
 
         embeddings = self.embed(captions)
         embeddings = torch.cat((features.unsqueeze(1), embeddings), 1)
