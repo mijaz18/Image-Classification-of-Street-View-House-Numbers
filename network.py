@@ -127,12 +127,13 @@ class Decoder(nn.Module):
         
         #outputs =      #outputs: (batch_size, t+1, vocab_size)
         embeddings = self.embed(captions)
-        embeddings = torch.cat((features.unsqueeze(1), embeddings), 1)
-        packed = pack_padded_sequence(embeddings, lengths, batch_first=True)
-        hiddens, _ = self.lstm(packed)
-        outputs = self.linear(hiddens[0])
+        outputs = torch.cat((features.unsqueeze(1), embeddings), 1)
+        #packed = pack_padded_sequence(embeddings, lengths, batch_first=True)
+        #outputs = self.linear(hiddens[0])
         # do not change the following code
-        #outputs =  pack_padded_sequence(outputs, lengths, batch_first=True)
+        outputs =  pack_padded_sequence(outputs, lengths, batch_first=True)
+        hiddens, _ = self.lstm(outputs)
+        outputs = self.linear(hiddens[0])
         return outputs[0]
     
     def sample(self, features, states=None):
