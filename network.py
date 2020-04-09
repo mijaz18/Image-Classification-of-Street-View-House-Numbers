@@ -125,7 +125,12 @@ class Decoder(nn.Module):
         # space for training with a cross-entropy loss function. 
          
         
-        outputs =     # outputs: (batch_size, t+1, vocab_size)
+        #outputs =      #outputs: (batch_size, t+1, vocab_size)
+        embeddings = self.embed(captions)
+        embeddings = torch.cat((features.unsqueeze(1), embeddings), 1)
+        packed = pack_padded_sequence(embeddings, lengths, batch_first=True)
+        hiddens, _ = self.lstm(packed)
+        outputs = self.linear(hiddens[0])
         # do not change the following code
         outputs =  pack_padded_sequence(outputs, lengths, batch_first=True)
         return outputs[0]
