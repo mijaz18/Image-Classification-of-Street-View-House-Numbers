@@ -18,12 +18,12 @@ class LSTMCell(nn.Module):
     def __init__(self, input_size, hidden_size):
         super(LSTMCell, self).__init__()
         # TODO:
-        self.input_size = input_size
-        self.hidden_size = hidden_size
-        #self.bias = True
-        self.i2h = nn.Linear(input_size, 4 * hidden_size)
-        self.h2h = nn.Linear(hidden_size, 4 * hidden_size)
-        self.reset_parameters()
+        # self.input_size = input_size
+        # self.hidden_size = hidden_size
+        # #self.bias = True
+        # self.i2h = nn.Linear(input_size, 4 * hidden_size)
+        # self.h2h = nn.Linear(hidden_size, 4 * hidden_size)
+        # self.reset_parameters()
 
 
     def reset_parameters(self):
