@@ -146,7 +146,7 @@ class Decoder(nn.Module):
 
         # do not change the following code
         #outputs =  pack_padded_sequence(outputs, lengths, batch_first=True)
-        return outputs[0]
+        return outputs
     
     def sample(self, features, states=None):
         """Generate captions for given image features with a word-by-word scheme."""
