@@ -36,9 +36,9 @@ class LSTMCell(nn.Module):
     def forward(self, x, hidden):
         # TODO:
         h, c = hidden
-        h = h.view(h.size(1), -1)
-        c = c.view(c.size(1), -1)
-        x = x.view(x.size(1), -1)
+        h = h.contigious().view(h.size(1), -1)
+        c = c.contigious().view(c.size(1), -1)
+        x = x.contigious().view(x.size(1), -1)
 
         # Linear mappings
         preact = self.i2h(x) + self.h2h(h)
