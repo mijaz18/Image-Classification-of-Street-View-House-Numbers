@@ -66,9 +66,10 @@ class LSTM(nn.Module):
 
         self.hidden_size = hidden_size # dimension of hidden states
         self.lstmcell = LSTMCell(input_size, hidden_size)
+        print(self.lstmcell, "CELL")
 
     def forward(self, x, states):
-        print(x, "SAME??")
+        #print(x, "SAME??")
         h0, c0 = states
         outs = []
         cn = c0[0, :, :]
