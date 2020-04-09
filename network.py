@@ -17,18 +17,18 @@ class LSTMCell(nn.Module):
     def __init__(self, input_size, hidden_size):
         super(LSTMCell, self).__init__()
         # TODO:
-        self.input_size = input_size
-        self.hidden_size = hidden_size
-        #self.use_bias = use_bias
-        self.weight_ih = nn.Parameter(
-            torch.FloatTensor(input_size, 4 * hidden_size))
-        self.weight_hh = nn.Parameter(
-            torch.FloatTensor(hidden_size, 4 * hidden_size))
+        # self.input_size = input_size
+        # self.hidden_size = hidden_size
+        # #self.use_bias = use_bias
+        # self.weight_ih = nn.Parameter(
+        #     torch.FloatTensor(input_size, 4 * hidden_size))
+        # self.weight_hh = nn.Parameter(
+        #     torch.FloatTensor(hidden_size, 4 * hidden_size))
         # if use_bias:
         #     self.bias = nn.Parameter(torch.FloatTensor(4 * hidden_size))
         # else:
         #     self.register_parameter('bias', None)
-        self.reset_parameters()
+        # self.reset_parameters()
 
     def reset_parameters(self):
         """
@@ -43,17 +43,17 @@ class LSTMCell(nn.Module):
 
     def forward(self, x, hidden):
         # TODO:
-        h_0, c_0 = hidden
-        batch_size = h_0.size(0)
-        bias_batch = (self.bias.unsqueeze(0)
-                      .expand(batch_size, *self.bias.size()))
-        wh_b = torch.addmm(bias_batch, h_0, self.weight_hh)
-        wi = torch.mm(x, self.weight_ih)
-        f, i, o, g = torch.split(wh_b + wi,
-                                 self.hidden_size, dim=1)
-        c_1 = torch.sigmoid(f) * c_0 + torch.sigmoid(i) * torch.tanh(g)
-        h_1 = torch.sigmoid(o) * torch.tanh(c_1)
-        hidden = (h_1,c_1)
+        # h_0, c_0 = hidden
+        # batch_size = h_0.size(0)
+        # bias_batch = (self.bias.unsqueeze(0)
+        #               .expand(batch_size, *self.bias.size()))
+        # wh_b = torch.addmm(bias_batch, h_0, self.weight_hh)
+        # wi = torch.mm(x, self.weight_ih)
+        # f, i, o, g = torch.split(wh_b + wi,
+        #                          self.hidden_size, dim=1)
+        # c_1 = torch.sigmoid(f) * c_0 + torch.sigmoid(i) * torch.tanh(g)
+        # h_1 = torch.sigmoid(o) * torch.tanh(c_1)
+        # hidden = (h_1,c_1)
         #Try this
         return hidden
 
