@@ -18,12 +18,16 @@ class LSTMCell(nn.Module):
     def __init__(self, input_size, hidden_size):
         super(LSTMCell, self).__init__()
         # TODO:
-        self.input_size = input_size
-        self.hidden_size = hidden_size
-        self.bias = True
-        self.i2h = nn.Linear(input_size, 4 * hidden_size, True)
-        self.h2h = nn.Linear(hidden_size, 4 * hidden_size, True)
-        self.reset_parameters()
+        # self.input_size = input_size
+        # self.hidden_size = hidden_size
+        # self.bias = True
+        # self.i2h = nn.Linear(input_size, 4 * hidden_size, True)
+        # self.h2h = nn.Linear(hidden_size, 4 * hidden_size, True)
+        # self.reset_parameters()
+
+        self.input_layer = torch.nn.Linear(input_size, hidden_size * 4)
+        self.hidden_layer = torch.nn.Linear(hidden_size, hidden_size * 4)
+        self.h = hidden_size
 
 
     def reset_parameters(self):
@@ -35,29 +39,43 @@ class LSTMCell(nn.Module):
 
     def forward(self, x, hidden):
         # TODO:
-        h, c = hidden
-        h = h.view(h.size(1), -1)
-        c = c.view(c.size(1), -1)
-        x = x.contiguous().view(x.size(1), -1)
-
-        # Linear mappings
-        preact = self.i2h(x) + self.h2h(h)
-
-        # activations
-        gates = preact[:, :3 * self.hidden_size].sigmoid()
-        g_t = preact[:, 3 * self.hidden_size:].tanh()
-        i_t = gates[:, :self.hidden_size]
-        f_t = gates[:, self.hidden_size:2 * self.hidden_size]
-        o_t = gates[:, -self.hidden_size:]
-
-        c_t = torch.mul(c, f_t) + torch.mul(i_t, g_t)
-
-        h_t = torch.mul(o_t, c_t.tanh())
-
-        h_t = h_t.view(1, h_t.size(0), -1)
-        c_t = c_t.view(1, c_t.size(0), -1)
-        hidden = (h_t,c_t)
-        return hidden
+        # h, c = hidden
+        # h = h.view(h.size(1), -1)
+        # c = c.view(c.size(1), -1)
+        # x = x.contiguous().view(x.size(1), -1)
+        #
+        # # Linear mappings
+        # preact = self.i2h(x) + self.h2h(h)
+        #
+        # # activations
+        # gates = preact[:, :3 * self.hidden_size].sigmoid()
+        # g_t = preact[:, 3 * self.hidden_size:].tanh()
+        # i_t = gates[:, :self.hidden_size]
+        # f_t = gates[:, self.hidden_size:2 * self.hidden_size]
+        # o_t = gates[:, -self.hidden_size:]
+        #
+        # c_t = torch.mul(c, f_t) + torch.mul(i_t, g_t)
+        #
+        # h_t = torch.mul(o_t, c_t.tanh())
+        #
+        # h_t = h_t.view(1, h_t.size(0), -1)
+        # c_t = c_t.view(1, c_t.size(0), -1)
+        # hidden = (h_t,c_t)
+        # return hidden
+        z_tm1, c_tm1 = hidden
+        h = self.h
+        gates = self.input_layer(x) + self.hidden_layer(z_tm1)
+        f = gates[:, :h]
+        i = gates[:, h:2*h]
+        o = gates[:, 2*h:3*h]
+        g = gates[:, 3*h:]
+        i = torch.sigmoid(i)
+        f = torch.sigmoid(f)
+        g = torch.tanh(g)
+        o = torch.sigmoid(o)
+        c = torch.sigmoid(f * c_tm1 + i * g)
+        z = o * torch.tanh(c)
+        return z, c
 
 
 class LSTM(nn.Module):
