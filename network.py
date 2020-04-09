@@ -68,6 +68,7 @@ class LSTM(nn.Module):
         self.lstmcell = LSTMCell(input_size, hidden_size)
 
     def forward(self, x, states):
+        print(x, "SAME??")
         h0, c0 = states
         outs = []
         cn = c0[0, :, :]
