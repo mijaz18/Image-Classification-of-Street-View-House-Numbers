@@ -132,7 +132,7 @@ class Decoder(nn.Module):
         hiddens, _ = self.lstm(packed)
         outputs = self.linear(hiddens[0])
         # do not change the following code
-        outputs =  pack_padded_sequence(outputs, lengths, batch_first=True)
+        #outputs =  pack_padded_sequence(outputs, lengths, batch_first=True)
         return outputs[0]
     
     def sample(self, features, states=None):
